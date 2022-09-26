@@ -1,0 +1,6 @@
+.spyproject\
+*.pyc
+*.ini
+documentos_revisar/
+*.xlsx
+*.xls
