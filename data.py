@@ -7,11 +7,15 @@ Created on Mon Sep  5 11:58:43 2022
 
 import requests
 import pandas as pd
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-TPM_URL = 'https://cdn.bancentral.gov.do/documents/estadisticas/sector-monetario-y-financiero/documents/Serie_TPM.xlsx?v=1662401485330'
-GDPS_URL = 'https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=excel'
-CBR_URL = 'http://www.cbrates.com/decisions.htm'
+TPM_URL = os.getenv('TPM_URL')
+GDPS_URL = os.getenv('GDPS_URL')
+CBR_URL = os.getenv('CBR_URL')
+
 mes_dict = {
     'Ene': 1,
     'Feb': 2,
