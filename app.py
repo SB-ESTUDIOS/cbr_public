@@ -17,7 +17,10 @@ st.set_page_config(
 
 st.title('🌎Presión Monetaria Internacional')
 
-dias = st.number_input('Días:', value=180)
+dias = st.number_input('Días:', 
+                       value=180, 
+                       min_value=1,
+                       max_value=600)
 series_index, cbr_historic = get_cbr_data(days=dias)
 
 fig = cbr_index_fig(series_index)
