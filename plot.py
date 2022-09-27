@@ -12,20 +12,19 @@ from plotly.subplots import make_subplots
 
 def fig_beautifier(fig, x_title=False, y_title=False):
     fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        plot_bgcolor="rgba(0, 0, 0, 0)",
+        paper_bgcolor="rgba(0, 0, 0, 0)",
         font=dict(
-        size=16,
-    ))
-   
-    if x_title != False:
+            size=16,
+        ),
+    )
+
+    if x_title is not False:
         fig.update_xaxes(title_text=x_title)
 
-    if y_title != False:
-        fig.update_yaxes(
-            title_text=y_title
-        )
-    
+    if y_title is not False:
+        fig.update_yaxes(title_text=y_title)
+
     return fig
 
 
@@ -80,8 +79,9 @@ def cbr_index_fig(df):
             ),
         ),
         font=dict(
-        size=16,
-    ))
+            size=16,
+        ),
+    )
 
     fig.update_yaxes(
         title_text="Índice de Presión Internacional",
@@ -92,29 +92,31 @@ def cbr_index_fig(df):
         tickformat=".2%",
         secondary_y=True,
     )
-    fig.update_layout(legend=dict(
-    yanchor="top",
-    y=0.99,
-    xanchor="left",
-    x=0.01
-    ))
-    
-    fig = fig_beautifier(fig,
-                         x_title='Fecha')
+    fig.update_layout(
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
+    )
+
+    fig = fig_beautifier(fig, x_title="Fecha")
     return fig
 
 
-def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, series_index_360, simple=True):
+def cbr_index_comp_fig(
+    series_index_60,
+    series_index_90,
+    series_index_180,
+    series_index_360,
+    simple=True,
+):
     if simple:
-        variable = 'index_no_w'
+        variable = "index_no_w"
     else:
-        variable = 'index_w'
-        
+        variable = "index_w"
+
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
             x=series_index_60.fecha,
-            y=series_index_60[f'{variable}'],
+            y=series_index_60[f"{variable}"],
             name="Índice 60 días",
             marker_color="black",
         )
@@ -122,7 +124,7 @@ def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, serie
     fig.add_trace(
         go.Scatter(
             x=series_index_90.fecha,
-            y=series_index_90[f'{variable}'],
+            y=series_index_90[f"{variable}"],
             name="Índice 90 días",
             marker_color="#B4C7E7",
         )
@@ -130,7 +132,7 @@ def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, serie
     fig.add_trace(
         go.Scatter(
             x=series_index_180.fecha,
-            y=series_index_180[f'{variable}'],
+            y=series_index_180[f"{variable}"],
             name="Índice 180 días",
             marker=dict(color="#8497B0"),
         )
@@ -138,7 +140,7 @@ def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, serie
     fig.add_trace(
         go.Scatter(
             x=series_index_360.fecha,
-            y=series_index_360[f'{variable}'],
+            y=series_index_360[f"{variable}"],
             name="Índice 360 días",
             marker_color="#33CCCC",
         )
@@ -154,19 +156,15 @@ def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, serie
         yref="y",
     )
 
-    fig.update_layout(legend=dict(
-    yanchor="top",
-    y=0.99,
-    xanchor="left",
-    x=0.01
-    ))
-    fig = fig_beautifier(fig,
-                         x_title='Fecha')
+    fig.update_layout(
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
+    )
+    fig = fig_beautifier(fig, x_title="Fecha")
     return fig
 
 
 def initial_plot(df):
-    df_positive = df[df['value'] == 1]
+    df_positive = df[df["value"] == 1]
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
@@ -174,26 +172,33 @@ def initial_plot(df):
             y=df_positive.value,
             name="Incrementos de tasa",
             marker=dict(color="blue"),
-        ))
-    df_negative = df[df['value'] == -1]
+        )
+    )
+    df_negative = df[df["value"] == -1]
     fig.add_trace(
         go.Bar(
             x=df_negative.fecha,
             y=df_negative.value,
             name="Reducciones de tasa",
             marker=dict(color="red"),
-        ))
-    fig = fig_beautifier(fig,
-                         x_title='Fecha')    
+        )
+    )
+    fig = fig_beautifier(fig, x_title="Fecha")
     return fig
 
 
 def initial_plot_m(df):
-    df_positive = df[df['value'] == 1]
-    df_positive = df_positive.groupby([df_positive.fecha.dt.year, df_positive.fecha.dt.month])['value'].sum()
-    df_positive.index.set_names(['ano', 'mes'], inplace=True)
+    df_positive = df[df["value"] == 1]
+    df_positive = df_positive.groupby(
+        [df_positive.fecha.dt.year, df_positive.fecha.dt.month]
+    )["value"].sum()
+    df_positive.index.set_names(["ano", "mes"], inplace=True)
     df_positive = df_positive.reset_index()
-    df_positive['fecha'] = df_positive['ano'].astype('str') + '-' + df_positive['mes'].astype('str')
+    df_positive["fecha"] = (
+        df_positive["ano"].astype("str")
+        + "-"
+        + df_positive["mes"].astype("str")
+    )
     fig = go.Figure()
     fig.add_trace(
         go.Bar(
@@ -201,20 +206,26 @@ def initial_plot_m(df):
             y=df_positive.value,
             name="Incrementos de tasa",
             marker=dict(color="blue"),
-        ))
-    df_negative = df[df['value'] == -1]
-    df_negative = df_negative.groupby([df_negative.fecha.dt.year, df_negative.fecha.dt.month])['value'].sum()
-    df_negative.index.set_names(['ano', 'mes'], inplace=True)
+        )
+    )
+    df_negative = df[df["value"] == -1]
+    df_negative = df_negative.groupby(
+        [df_negative.fecha.dt.year, df_negative.fecha.dt.month]
+    )["value"].sum()
+    df_negative.index.set_names(["ano", "mes"], inplace=True)
     df_negative = df_negative.reset_index()
-    df_negative['fecha'] = df_negative['ano'].astype('str') + '-' + df_negative['mes'].astype('str')
+    df_negative["fecha"] = (
+        df_negative["ano"].astype("str")
+        + "-"
+        + df_negative["mes"].astype("str")
+    )
     fig.add_trace(
         go.Bar(
             x=df_negative.fecha,
             y=df_negative.value,
             name="Reducciones de tasa",
             marker=dict(color="red"),
-        ))
-    fig = fig_beautifier(fig,
-                         x_title='Fecha')
+        )
+    )
+    fig = fig_beautifier(fig, x_title="Fecha")
     return fig
-    
