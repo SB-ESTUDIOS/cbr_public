@@ -52,7 +52,7 @@ series_index_360, cbr_historic = get_cbr_data(days=360)
 simple = st.radio("Simple o Ponderado", ["simple", "ponderado"])
 
 simple_parameter = True if simple == "simple" else False
-tipo_ind = "ponderado" if simple == "simple" else "ponderado"
+tipo_ind = "simple" if simple == "simple" else "ponderado"
 
 st.subheader(f"Comparación de múltiples rangos para el índice {tipo_ind}")
 st.plotly_chart(
