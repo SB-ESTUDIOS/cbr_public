@@ -10,6 +10,25 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 
+def fig_beautifier(fig, x_title=False, y_title=False):
+    fig.update_layout(
+        plot_bgcolor = 'rgba(0, 0, 0, 0)',
+        paper_bgcolor = 'rgba(0, 0, 0, 0)',
+        font=dict(
+        size=16,
+    ))
+   
+    if x_title != False:
+        fig.update_xaxes(title_text=x_title)
+
+    if y_title != False:
+        fig.update_yaxes(
+            title_text=y_title
+        )
+    
+    return fig
+
+
 def cbr_index_fig(df):
     df.sort_values("fecha", inplace=True)
     fig = make_subplots(specs=[[{"secondary_y": True}]])
@@ -52,11 +71,6 @@ def cbr_index_fig(df):
     )
 
     fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        # font_family='Calibri',
-        # title="<b>Comparación Tasa de Política Monetaria e Índice de Presión Internacional</b>",
-        # title_x=0.5,
         yaxis2=dict(
             tickfont=dict(
                 color="#33CCCC",
@@ -69,13 +83,8 @@ def cbr_index_fig(df):
         size=16,
     ))
 
-    # Set x-axis title
-    fig.update_xaxes(title_text="Fecha")
-
-    # Set y-axes titles
     fig.update_yaxes(
         title_text="Índice de Presión Internacional",
-        # range=[-4.2, 4.2],
         secondary_y=False,
     )
     fig.update_yaxes(
@@ -88,8 +97,10 @@ def cbr_index_fig(df):
     y=0.99,
     xanchor="left",
     x=0.01
-))
-    fig.update_xaxes(range=["2016-01-02", "2022-09-20"])
+    ))
+    
+    fig = fig_beautifier(fig,
+                         x_title='Fecha')
     return fig
 
 
@@ -143,30 +154,14 @@ def cbr_index_comp_fig(series_index_60, series_index_90, series_index_180, serie
         yref="y",
     )
 
-    fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        # font_family='Calibri',
-        # title="<b>Comparación Tasa de Política Monetaria e Índice de Presión Internacional</b>",
-        # title_x=0.5,
-        font=dict(
-        size=16,
-    ))
-
-    # Set x-axis title
-    fig.update_xaxes(title_text="Fecha")
-
-    # Set y-axes titles
-    fig.update_yaxes(
-        title_text="Índice de Presión Internacional"
-    )
     fig.update_layout(legend=dict(
     yanchor="top",
     y=0.99,
     xanchor="left",
     x=0.01
-))
-    fig.update_xaxes(range=["2016-01-02", "2022-09-20"])
+    ))
+    fig = fig_beautifier(fig,
+                         x_title='Fecha')
     return fig
 
 
@@ -188,47 +183,8 @@ def initial_plot(df):
             name="Reducciones de tasa",
             marker=dict(color="red"),
         ))
-    fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        # font_family='Calibri',
-        # title="<b>Comparación Tasa de Política Monetaria e Índice de Presión Internacional</b>",
-        # title_x=0.5,
-        font=dict(
-        size=14,
-    ))
-    fig.update_xaxes(range=["2016-01-02", "2022-09-20"])
-    return fig
-
-
-def plot_rd_vs_usa(df):
-    df_positive = df[df['pais'] == 'Dominican Republic']
-    fig = go.Figure()
-    fig.add_trace(
-        go.Bar(
-            x=df_positive.fecha,
-            y=df_positive.value,
-            name="Movimientos de RD",
-            marker=dict(color="blue"),
-        ))
-    df_negative = df[df['pais'] == 'USA']
-    fig.add_trace(
-        go.Bar(
-            x=df_negative.fecha,
-            y=df_negative.value,
-            name="Movimientos de USA",
-            marker=dict(color="red"),
-        ))
-    fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        # font_family='Calibri',
-        # title="<b>Comparación Tasa de Política Monetaria e Índice de Presión Internacional</b>",
-        # title_x=0.5,
-        font=dict(
-        size=16,
-    ))
-    fig.update_xaxes(range=["2016-01-02", "2022-09-20"])
+    fig = fig_beautifier(fig,
+                         x_title='Fecha')    
     return fig
 
 
@@ -258,15 +214,7 @@ def initial_plot_m(df):
             name="Reducciones de tasa",
             marker=dict(color="red"),
         ))
-    fig.update_layout(
-        plot_bgcolor = 'rgba(0, 0, 0, 0)',
-        paper_bgcolor = 'rgba(0, 0, 0, 0)',
-        # font_family='Calibri',
-        # title="<b>Comparación Tasa de Política Monetaria e Índice de Presión Internacional</b>",
-        # title_x=0.5,
-        font=dict(
-        size=14,
-    ))
-    fig.update_xaxes(range=["2016-01-02", "2022-09-20"])
+    fig = fig_beautifier(fig,
+                         x_title='Fecha')
     return fig
     

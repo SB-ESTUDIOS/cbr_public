@@ -29,19 +29,21 @@ def index_no_w(date, df, days=180):
     today = date
     cutoff_date = today - pd.Timedelta(days=days)
     rng = pd.date_range(cutoff_date, today)
-    banks=len(df.pais.unique())
-    df_prueba=df[df['fecha'].isin(rng)]
-    results=(df_prueba['ult_cambio'][df_prueba['ult_cambio']=='raises'].count()-df_prueba['ult_cambio'][df_prueba['ult_cambio']=='cuts'].count())/banks
+    banks = len(df.pais.unique())
+    df_cut = df[df['fecha'].isin(rng)]
+    results = (df_cut['ult_cambio'][df_cut['ult_cambio']=='raises'].count() - df_cut['ult_cambio'][df_cut['ult_cambio']=='cuts'].count())/banks
     return results
 
 
 def index_series_no_w(df, days=180):
     today = pd.to_datetime("today")
-    start=min(df['fecha']) + pd.Timedelta(days=days)
+    start = min(df['fecha']) + pd.Timedelta(days=days)
     rng = pd.date_range(start, today)
     series = pd.DataFrame({'fecha': rng})
-    series['index_no_w'] = series.apply(lambda row : index_no_w(row['fecha'], df, days=days),
-                                    axis = 1)
+    series['index_no_w'] = series.apply(lambda row : index_no_w(row['fecha'], 
+                                                                df, 
+                                                                days=days),
+                                    axis=1)
     return series
 
 
@@ -72,44 +74,41 @@ def weights(gdps, cbr_historic):
     return percents_df
 
 
-def index_w(date, df, w, days=180, decay=False):
-    df['value']=np.where(
+def index_w(date, df, w, days=180):
+    df['value'] = np.where(
         df['ult_cambio']=='raises',
-        1,
-        np.where(
-            df['ult_cambio']=='cuts',
-            -1,
-            0))
-    df['ano']=pd.DatetimeIndex(df['fecha']).year
-    df['ano']=np.where(df['ano']==2022,
-                        2021,
-                        df['ano'])
-    df=df.merge(w, how='left', on=['pais','ano'])
-    df['value']=df.gdp*df.value
+            1,
+            np.where(
+                    df['ult_cambio']=='cuts',
+                    -1,
+                     0))
+    df['ano'] = pd.DatetimeIndex(df['fecha']).year
+    df['ano'] = np.where(df['ano']==2022,
+                         2021,
+                         df['ano'])
+    df = df.merge(w, 
+                  how='left', 
+                  on=['pais','ano'])
+    df['value'] = df.gdp * df.value
     today = date
     cutoff_date = today - pd.Timedelta(days=days)
     rng = pd.date_range(cutoff_date, today).normalize()
-    df_prueba=df[df['fecha'].isin(rng)]
-    df_prueba['decay']=((today-df_prueba.fecha).dt.days/days-1)*-1
-    if decay == True:
-        df_prueba['value']=df_prueba.value*df_prueba.decay
-    else:
-        df_prueba['value']=df_prueba.value
-    results=df_prueba['value'].sum()
+    df_cut = df[df['fecha'].isin(rng)]
+    results = df_cut['value'].sum()
     return results
 
 
-def index_series_w(gdps, cbr_historic, days=180, decay=False):
-    w=weights(gdps, cbr_historic)
+def index_series_w(gdps, cbr_historic, days=180):
+    w = weights(gdps, cbr_historic)
     today = pd.to_datetime("today")
-    start=min(cbr_historic['fecha']) + pd.Timedelta(days=days)
+    start = min(cbr_historic['fecha']) + pd.Timedelta(days=days)
     rng = pd.date_range(start, today)
     series = pd.DataFrame({'fecha': rng})
     series['index_w'] = series.apply(lambda row : index_w(row['fecha'], 
                                                          cbr_historic,
                                                          w,
-                                                         days,
-                                                         decay), 
+                                                         days
+                                                         ), 
                                     axis = 1)
     return series
 

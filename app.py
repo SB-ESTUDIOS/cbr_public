@@ -27,10 +27,13 @@ fig = cbr_index_fig(series_index)
 fig_initial = initial_plot(cbr_historic)
 fig_initial_m = initial_plot_m(cbr_historic)
 
+st.subheader(f'''Índice Simple y Ponderado vs Tasa de Política Monetaria, ventana de {dias} días''')
 st.plotly_chart(fig, use_container_width=True)
 
+st.subheader('Incrementos y reducciones diarias por autoridades monetarias')
 st.plotly_chart(fig_initial, use_container_width=True)
 
+st.subheader('Incrementos y reducciones acumuladas mensuales')
 st.plotly_chart(fig_initial_m, use_container_width=True)
 
 
@@ -45,10 +48,12 @@ simple = st.radio('Simple o Ponderado', ['simple', 'ponderado'])
 
 if simple == 'simple':
     simple = True
+    tipo_ind = 'simple'
 else:
     simple = False
+    tipo_ind = 'ponderado'
     
-
+st.subheader(f'Comparación de múltiples rangos para el índice {tipo_ind}')
 st.plotly_chart(cbr_index_comp_fig(
     series_index_60,
     series_index_90,
